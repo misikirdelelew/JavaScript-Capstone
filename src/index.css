@@ -1,8 +1,4 @@
-h1 {
-  color: red;
-}
-
-* Color palette */:root {
+:root {
   --dark-blue: #122c34;
   --mild-blue: #224870;
   --blue-blue: #2a4494;
