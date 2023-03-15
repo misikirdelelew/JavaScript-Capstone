@@ -2,6 +2,18 @@ h1 {
   color: red;
 }
 
+* Color palette */:root {
+  --dark-blue: #122c34;
+  --mild-blue: #224870;
+  --blue-blue: #2a4494;
+  --light-blue: #4ea5d9;
+  --water-blue: #44cfcb;
+  --text-white: #fff;
+  --gold: #dbae25;
+  --heart-red: rgb(223, 2, 2);
+  --count-hover: rgb(179, 4, 4);
+}
+
 * {
   padding: 0;
   margin: 0;
@@ -72,4 +84,12 @@ header {
   padding: 0.7rem;
   border-radius: 0.5rem;
   border: 0;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 2rem 0;
+  background-color: var(--dark-blue);
+  color: var(--text-white);
 }
