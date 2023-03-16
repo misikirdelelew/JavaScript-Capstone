@@ -94,7 +94,11 @@ class ListingsData {
           longitude: ${listing.location.address.coordinate.lon}
         </p>
       `;
-      listingEl.append(listingImg, listingTitle, listingLocation);
+      const commentsEl = document.createElement('span');
+      commentsEl.classList.add('comments');
+      commentsEl.textContent = 'Comments';
+      commentsEl.dataset.id = listing.property_id;
+      listingEl.append(listingImg, listingTitle, listingLocation, commentsEl);
       container.appendChild(listingEl);
 
       const likeBtn = document.querySelector(`[data-id="${listing.property_id}"] .like-btn`);
@@ -102,10 +106,55 @@ class ListingsData {
         e.preventDefault();
         this.postLike(e.target.id);
       });
+
+      commentsEl.addEventListener('click', (e) => {
+        e.preventDefault();
+        console.log('comments clicked');
+        this.renderComments(listing, document.getElementById('main-content-wrap'));
+      });
     });
     const listingsCount = document.querySelectorAll('.listing');
     const sectionTitle = document.getElementById('main-section-title');
     sectionTitle.innerHTML = `Top Rent Listings (${listingsCount.length})`;
+  };
+
+  renderComments = async (listing, container) => {
+    const popupWrapEl = document.createElement('div');
+    popupWrapEl.classList.add('popup-wrap');
+    popupWrapEl.setAttribute('data-id', listing.property_id);
+    const listingImg = document.createElement('img');
+    listingImg.src = listing.primary_photo.href;
+    listingImg.classList.add('popup-img');
+    const closeBtn = document.createElement('img');
+    closeBtn.src = 'https://img.icons8.com/ios/50/000000/close-window.png';
+    closeBtn.classList.add('popup-close-btn');
+    const listingTitle = document.createElement('h2');
+    listingTitle.classList.add('listing-title');
+    listingTitle.textContent = `Rate: $${listing.list_price || 'not available'} per month`;
+    const popupDetails = document.createElement('div');
+    popupDetails.classList.add('popup-details');
+    popupDetails.innerHTML = `
+      <p><span class = "bolden">City: </span> ${listing.location.address.city} </p>
+      <p><span class = "bolden">State: </span> ${listing.location.address.state} </p>
+      <p><span class = "bolden">Address: </span> ${listing.location.address.line}</p>
+      <p><span class = "bolden">Cordinates: </span>
+        [
+          lat: ${listing.location.address.coordinate.lat},
+          long: ${listing.location.address.coordinate.lon}
+        ]
+      </p>
+    `;
+    const commentsEl = document.createElement('span');
+    commentsEl.classList.add('comments');
+    commentsEl.textContent = 'Comments (0)';
+    commentsEl.dataset.id = listing.property_id;
+    popupWrapEl.append(listingImg, closeBtn, listingTitle, popupDetails, commentsEl);
+    container.appendChild(popupWrapEl);
+
+    closeBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      popupWrapEl.style.display = 'none';
+    });
   };
 }
 
