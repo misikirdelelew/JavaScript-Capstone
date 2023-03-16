@@ -82,6 +82,45 @@ header {
   border: 0;
 }
 
+/* pop-up */
+main {
+  position: relative;
+}
+
+.pop-up {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--dark-blue);
+  padding: 2rem;
+  max-width: 80vw;
+  color: var(--text-white);
+  border-radius: 1.5rem;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  box-shadow: -1px 5px 13px 6px rgba(0, 0, 0, 0.75);
+}
+
+.pop-up .icon {
+  align-self: flex-end;
+  padding: 0.5rem 0.5rem 1rem 0.5rem;
+  font-size: 2.5rem;
+}
+
+.pop-up img {
+  width: 300px;
+  height: auto;
+}
+
+.pop-up h2 {
+  font-weight: 600;
+  font-size: 3.5rem;
+  padding: 0.5rem 0;
+  margin: 0;
+}
+
 /* Footer */
 footer {
   text-align: center;
