@@ -97,15 +97,49 @@ header {
 main {
   width: 80%;
   height: 80%;
+  position: relative;
+}
+
+.section-titles {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+}
+
+.section-titles > * {
+  cursor: pointer;
+  color: var(--dark-blue);
+}
+
+.section-titles > *::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 2px;
+  background: var(--gold);
+  transition: width 0.3s;
+}
+
+.section-titles > *:hover::after {
+  width: 100%;
 }
 
 .listings {
   width: 100%;
   height: 100%;
+  padding: 5px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
   grid-gap: 10px;
+}
+
+.listing {
+  padding: 5px;
+}
+
+.listing:hover {
+  border: 1px solid lightgray;
 }
 
 .listing img {
@@ -113,9 +147,14 @@ main {
 }
 
 .listing-title {
-  font-size: 1rem;
+  padding-inline: 0.8rem;
   display: flex;
+  justify-content: space-between;
   gap: 5px;
+}
+
+.listing-title h3 {
+  font-size: 1.5rem;
 }
 
 .likes-info {
@@ -142,10 +181,6 @@ main {
 }
 
 /* pop-up */
-main {
-  position: relative;
-}
-
 .pop-up {
   position: absolute;
   display: flex;
