@@ -1,10 +1,10 @@
 import {
   setComment,
   getComments,
-} from './data_interact.js';
+} from './data_interaction.js';
 import {
   getData,
-} from './api-utility.js';
+} from './api-util.js';
 
 // Function to create comment element
 const createComment = (user, date, message) => {
