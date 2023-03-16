@@ -1,5 +1,4 @@
 import './index.css';
-import './styles/main.css';
 import { retriveAllData, countShows } from './modules/dom-utils.js';
 import setPopup from './modules/popUp_element.js';
 import listingsData from './modules/listingsData.js';
