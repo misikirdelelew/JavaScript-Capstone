@@ -1,6 +1,5 @@
 import { INV_COMMENT_URL } from './constant.js';
 import { postData } from './api-util.js';
-
 // Function to set comment
 const setComment = async (itemId, userName, userComment) => {
   const comment = { item_id: itemId, username: `${userName}`, comment: `${userComment}` };
