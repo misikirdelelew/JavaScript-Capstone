@@ -195,6 +195,13 @@ main {
   background-image: url(./heart-shaded1.svg);
 }
 
+.comments {
+  width: 60%;
+  padding: 5px 10px;
+  box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.656);
+  margin: 10px auto;
+}
+
 .popup-wrap {
   padding-block: 40px;
   position: absolute;
