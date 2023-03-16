@@ -53,8 +53,7 @@ class ListingsData {
           return response.json();
         }
         throw new Error('Error posting like');
-      })
-      .then((data) => console.log(data));
+      });
   };
 
   getLikes = async () => {
