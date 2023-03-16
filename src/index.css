@@ -25,6 +25,7 @@ body {
 }
 
 header {
+  width: 100%;
   padding: 2rem 0;
   background-color: var(--dark-blue);
   border-bottom: var(--mild-blue);
@@ -132,6 +133,7 @@ main {
 }
 
 footer {
+  width: 100%;
   text-align: center;
   padding: 2rem 0;
   background-color: var(--dark-blue);
