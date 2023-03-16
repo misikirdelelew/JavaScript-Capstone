@@ -305,7 +305,7 @@ textarea {
   color: var(--gold);
 }
 
-.likes-num>span {
+.likes-num > span {
   color: var(--heart-red);
   font-size: 1.1rem;
   font-weight: 700;

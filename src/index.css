@@ -97,6 +97,7 @@ header {
 main {
   width: 80%;
   height: 80%;
+  position: relative;
 }
 
 .section-titles {
@@ -180,10 +181,6 @@ main {
 }
 
 /* pop-up */
-main {
-  position: relative;
-}
-
 .pop-up {
   position: absolute;
   display: flex;
