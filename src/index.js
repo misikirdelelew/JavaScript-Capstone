@@ -4,7 +4,6 @@ import setPopup from './modules/popUp_element.js';
 import listingsData from './modules/listingsData.js';
 
 const main = document.querySelector('.main');
-
 window.onload = () => retriveAllData().then(() => {
   countShows();
 });

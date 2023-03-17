@@ -88,13 +88,13 @@ class ListingsData {
       const listingLocation = document.createElement('div');
       listingLocation.classList.add('listing-location');
       listingLocation.innerHTML = `
-        <p>Location: ${listing.location.address.city}, ${listing.location.address.state}, ${listing.location.address.country}</p>
-        <p>Cordinates:
-          latitude: ${listing.location.address.coordinate.lat}
-          longitude: ${listing.location.address.coordinate.lon}
-        </p>
+        <p>Location: ${listing.location.address.line}, ${listing.location.address.city}, ${listing.location.address.state}</p
       `;
-      listingEl.append(listingImg, listingTitle, listingLocation);
+      const commentsEl = document.createElement('span');
+      commentsEl.classList.add('comments');
+      commentsEl.textContent = 'Comments';
+      commentsEl.dataset.id = listing.property_id;
+      listingEl.append(listingImg, listingTitle, listingLocation, commentsEl);
       container.appendChild(listingEl);
 
       const likeBtn = document.querySelector(`[data-id="${listing.property_id}"] .like-btn`);
@@ -102,11 +102,108 @@ class ListingsData {
         e.preventDefault();
         this.postLike(e.target.id);
       });
+
+      commentsEl.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.renderComments(listing, document.getElementById('main-content-wrap'));
+      });
     });
     const listingsCount = document.querySelectorAll('.listing');
     const sectionTitle = document.getElementById('main-section-title');
     sectionTitle.innerHTML = `Top Rent Listings (${listingsCount.length})`;
   };
+
+  renderComments = async (listing, container) => {
+    const popupWrapEl = document.createElement('div');
+    popupWrapEl.classList.add('popup-wrap');
+    popupWrapEl.setAttribute('data-id', listing.property_id);
+    const listingImg = document.createElement('img');
+    listingImg.src = listing.primary_photo.href;
+    listingImg.classList.add('popup-img');
+    const closeBtn = document.createElement('img');
+    closeBtn.src = 'https://img.icons8.com/ios/50/000000/close-window.png';
+    closeBtn.classList.add('popup-close-btn');
+    const listingTitle = document.createElement('h2');
+    listingTitle.classList.add('listing-title');
+    listingTitle.textContent = `Rate: $${listing.list_price || 'not available'} per month`;
+    const popupDetails = document.createElement('div');
+    popupDetails.classList.add('popup-details');
+    popupDetails.innerHTML = `
+      <p><span class = "bolden">City: </span> ${listing.location.address.city} </p>
+      <p><span class = "bolden">State: </span> ${listing.location.address.state} </p>
+      <p><span class = "bolden">Address: </span></br> ${listing.location.address.line}</p>
+      <p><span class = "bolden">Cordinates: </span></br>
+        [
+          lat: ${listing.location.address.coordinate.lat},
+          long: ${listing.location.address.coordinate.lon}
+        ]
+      </p>
+    `;
+    const commentsEl = document.createElement('div');
+    commentsEl.classList.add('popup-comments');
+    const commentsHeadingEl = document.createElement('h3');
+    const response = await fetch(`${this.baseURLInvAPI}apps/${this.involvementAPIAppID}/comments?item_id=${listing.property_id}`);
+    const data = await response.json();
+    if (data.length > 0) {
+      data.forEach((comment) => {
+        const commentItem = document.createElement('p');
+        commentItem.classList.add('comment');
+        commentItem.innerHTML = `
+          <span class="bolden">${comment.creation_date}</span>
+          <span class="username">${comment.username}: </span>
+          <span class="comment-text">${comment.comment}</span>
+        `;
+        commentsEl.appendChild(commentItem);
+      });
+    }
+    commentsHeadingEl.textContent = `Comments (${data.length || 'no comments yet'})`;
+    commentsEl.prepend(commentsHeadingEl);
+    commentsEl.dataset.id = listing.property_id;
+    const commentsForm = document.createElement('form');
+    commentsForm.classList.add('comments-form');
+    commentsForm.innerHTML = `
+      <input type="text" name="name" placeholder="Your name" required>
+      <textarea name="comment" placeholder="Your comment" required></textarea>
+      <button type="submit">Submit</button>
+    `;
+    popupWrapEl.append(listingImg, closeBtn, listingTitle, popupDetails, commentsEl, commentsForm);
+    container.appendChild(popupWrapEl);
+    closeBtn.addEventListener('click', () => {
+      popupWrapEl.remove();
+    });
+
+    commentsForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const username = e.target.name.value;
+      const comment = e.target.comment.value;
+      this.addComment(listing.property_id, username, comment);
+      e.target.reset();
+      popupWrapEl.innerHTML = `
+      <h2>Thank you for your comment!</h2>
+      `;
+      setTimeout(() => {
+        popupWrapEl.remove();
+      }, 3000);
+    });
+  }
+
+  addComment = (id, username, comment) => {
+    const options = {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        item_id: `${id}`,
+        username,
+        comment,
+      }),
+    };
+
+    fetch(`${this.baseURLInvAPI}apps/${this.involvementAPIAppID}/comments/`, options)
+      .then((response) => response.json())
+      .catch((error) => {
+        throw new Error(error);
+      });
+  }
 }
 
 const listingsData = new ListingsData();
