@@ -6,6 +6,18 @@ class ListingsData {
     this.involvementAPIAppID = window.localStorage.getItem('involvementAPIAppID') || '';
   }
 
+  createInvolvementTrackerApp = async () => {
+    const options = {
+      method: 'POST',
+      headers: {
+        'content-type': 'text/plain',
+      },
+    };
+    const response = await fetch(`${this.baseURLInvAPI}apps/`, options);
+    const data = await response.text();
+    window.localStorage.setItem('involvementAPIAppID', data);
+  };
+
   getProperties = async () => {
     const options = {
       method: 'POST',
@@ -21,18 +33,7 @@ class ListingsData {
     const data = await response.json();
     this.listings = data.data.home_search.results;
     window.localStorage.setItem('listings', JSON.stringify(this.listings));
-  };
-
-  createInvolvementTrackerApp = async () => {
-    const options = {
-      method: 'POST',
-      headers: {
-        'content-type': 'text/plain',
-      },
-    };
-    const response = await fetch(`${this.baseURLInvAPI}apps/`, options);
-    const data = await response.text();
-    window.localStorage.setItem('involvementAPIAppID', await data);
+    return this.listings;
   };
 
   postLike = (id) => {
@@ -57,6 +58,7 @@ class ListingsData {
   getLikes = async () => {
     const response = await fetch(`${this.baseURLInvAPI}apps/${this.involvementAPIAppID}/likes/`);
     const data = await response.json();
+    console.log(data);
     return data;
   };
 
@@ -68,7 +70,11 @@ class ListingsData {
     });
   };
 
-  render = (container) => {
+  render = async (container) => {
+    if (this.listings === []) {
+      this.listings = await this.getProperties();
+      window.localStorage.setItem('listings', JSON.stringify(this.listings));
+    }
     this.listings.forEach((listing, i) => {
       if (i > 8) return;
       const listingEl = document.createElement('div');

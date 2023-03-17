@@ -12,3 +12,7 @@ setPopup(main);
 const listingsContainerEl = document.getElementById('listings');
 listingsData.render(listingsContainerEl);
 listingsData.updateLikes();
+if (!window.localStorage.getItem('involvementAPIAppID')) {
+  console.log('no existing involvement API ID. creating one...')
+  listingsData.createInvolvementTrackerApp();
+} else console.log('involvement API found in localStorage!');

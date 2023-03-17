@@ -202,6 +202,7 @@ main {
   padding: 5px 10px;
   box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.656);
   margin: 10px auto;
+  cursor: pointer;
 }
 
 .popup-wrap {
@@ -223,6 +224,7 @@ main {
   position: absolute;
   top: 40px;
   right: 10px;
+  cursor: pointer;
 }
 
 .popup-img {
