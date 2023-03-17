@@ -6,19 +6,20 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "start": "webpack serve --open"
+    "start": "webpack serve --open",
+    "deploy": "webpack && gh-pages -d dist"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Reggeditt/Webpack-template.git"
+    "url": "git+https://github.com/misikirdelelew/JavaScript-Capstone.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Reggeditt/Webpack-template/issues"
+    "url": "https://github.com/misikirdelelew/JavaScript-Capstone/issues"
   },
-  "homepage": "https://github.com/Reggeditt/Webpack-template#readme",
+  "homepage": "https://github.com/misikirdelelew/JavaScript-Capstone",
   "devDependencies": {
     "babel-eslint": "^10.1.0",
     "css-loader": "^6.7.3",
@@ -37,5 +38,8 @@
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^4.11.1"
+  },
+  "dependencies": {
+    "gh-pages": "^5.0.0"
   }
 }
