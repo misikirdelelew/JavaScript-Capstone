@@ -88,11 +88,7 @@ class ListingsData {
       const listingLocation = document.createElement('div');
       listingLocation.classList.add('listing-location');
       listingLocation.innerHTML = `
-        <p>Location: ${listing.location.address.city}, ${listing.location.address.state}, ${listing.location.address.country}</p>
-        <p>Cordinates:
-          latitude: ${listing.location.address.coordinate.lat}
-          longitude: ${listing.location.address.coordinate.lon}
-        </p>
+        <p>Location: ${listing.location.address.line}, ${listing.location.address.city}, ${listing.location.address.state}</p
       `;
       const commentsEl = document.createElement('span');
       commentsEl.classList.add('comments');

@@ -236,7 +236,7 @@ main {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: auto;
-  grid-gap: 1rem; 
+  grid-gap: 1rem;
 }
 
 .bolden {
