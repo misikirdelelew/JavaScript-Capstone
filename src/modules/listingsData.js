@@ -1,27 +1,10 @@
 class ListingsData {
   constructor() {
-    this.listings = JSON.parse(window.localStorage.getItem('listings')) || [];
+    this.listings = [];
     this.realtorApiUrl = 'https://realty-in-us.p.rapidapi.com/properties/v3/list';
     this.baseURLInvAPI = 'https://us-central1-involvement-api.cloudfunctions.net/capstoneApi/';
     this.involvementAPIAppID = window.localStorage.getItem('involvementAPIAppID') || '';
   }
-
-  getProperties = async () => {
-    const options = {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        'X-RapidAPI-Key': '0ab2689c00mshf814237c331556cp10bc14jsnfee9b6b48580',
-        'X-RapidAPI-Host': 'realty-in-us.p.rapidapi.com',
-      },
-      body: '{"limit":200,"offset":0,"baths":{"min":3},"list_price":{"max":900,"min":200},"beds":{"max":3,"min":1},"cats":true,"dogs":true,"state_code":"TX","status":["for_rent"],"type":["condos","condo_townhome_rowhome_coop","condo_townhome","townhomes","duplex_triplex","single_family","multi_family","apartment","condop","coop"],"sort":{"direction":"desc","field":"list_date"}}',
-    };
-
-    const response = await fetch(this.realtorApiUrl, options);
-    const data = await response.json();
-    this.listings = data.data.home_search.results;
-    window.localStorage.setItem('listings', JSON.stringify(this.listings));
-  };
 
   createInvolvementTrackerApp = async () => {
     const options = {
@@ -32,7 +15,25 @@ class ListingsData {
     };
     const response = await fetch(`${this.baseURLInvAPI}apps/`, options);
     const data = await response.text();
-    window.localStorage.setItem('involvementAPIAppID', await data);
+    window.localStorage.setItem('involvementAPIAppID', data);
+  };
+
+  getProperties = async () => {
+    const options = {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'X-RapidAPI-Key': '0ab2689c00mshf814237c331556cp10bc14jsnfee9b6b48580',
+        'X-RapidAPI-Host': 'realty-in-us.p.rapidapi.com',
+      },
+      body: '{"limit":20,"offset":0,"baths":{"min":3},"list_price":{"max":900,"min":200},"beds":{"max":3,"min":1},"cats":true,"dogs":true,"state_code":"TX","status":["for_rent"],"type":["condos","condo_townhome_rowhome_coop","condo_townhome","townhomes","duplex_triplex","single_family","multi_family","apartment","condop","coop"],"sort":{"direction":"desc","field":"list_date"}}',
+    };
+
+    const response = await fetch(this.realtorApiUrl, options);
+    const data = await response.json();
+    console.log('data received from API: ', data);
+    this.listings = data.data.home_search.results;
+    return this.listings;
   };
 
   postLike = (id) => {
@@ -47,6 +48,7 @@ class ListingsData {
     fetch(`${this.baseURLInvAPI}apps/${this.involvementAPIAppID}/likes/`, options)
       .then((response) => {
         if (response.ok) {
+          console.log('like posted successfully, calling updateLikes...');
           this.updateLikes();
           return response.json();
         }
@@ -57,6 +59,7 @@ class ListingsData {
   getLikes = async () => {
     const response = await fetch(`${this.baseURLInvAPI}apps/${this.involvementAPIAppID}/likes/`);
     const data = await response.json();
+    console.log('likes data recieved from API ', data);
     return data;
   };
 
@@ -64,18 +67,26 @@ class ListingsData {
     const likeCounters = document.querySelectorAll('.likes-count');
     likeCounters.forEach(async (counter, index) => {
       const likesData = await this.getLikes();
+      console.log('likesData returned in updatelikes(): ', likesData);
       counter.innerHTML = `${likesData[index].likes} likes`;
     });
   };
 
-  render = (container) => {
+  render = async (container) => {
+    if (this.listings.length === 0) {
+      this.listings = await this.getProperties();
+      console.log('listings data in render(): ', this.listings);
+    }
     this.listings.forEach((listing, i) => {
-      if (i > 8) return;
+      console.log('this is loop iteration: ', i);
       const listingEl = document.createElement('div');
       listingEl.classList.add('listing');
       listingEl.setAttribute('data-id', listing.property_id);
       const listingImg = document.createElement('img');
-      listingImg.src = listing.primary_photo.href;
+      console.log('listing.primary_photo.href: ', listing.primary_photo.href);
+      if (!listing.primary_photo.href) {
+        listingImg.src = 'https://via.placeholder.com/300x200';
+      } else listingImg.src = listing.primary_photo.href;
       const listingTitle = document.createElement('div');
       listingTitle.classList.add('listing-title');
       listingTitle.innerHTML = `
